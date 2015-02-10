@@ -1,0 +1,45 @@
+{$contentMenu}
+
+{*<p class="ow_stdmargin">
+    {text key='notifications+preferences_legend'}
+</p>*}
+
+<div class="ow_wide ow_automargin">
+{form name="notificationSettingForm"}
+
+<table class="ow_table_1 ow_form">
+
+    {foreach from=$actions item=plugin name="plugins"}
+	    <tr class="ow_tr_first">
+	        <th class="ow_name ow_txtleft" colspan="2">
+	            <span class="ow_section_icon {$plugin.icon}">{$plugin.label}</span>
+	        </th>
+	    </tr>
+	    {foreach from=$plugin.actions item=action name="actions"}
+	        <tr class="{cycle name="install" values="ow_alt1,ow_alt2"} {if $smarty.foreach.actions.last}ow_tr_last{/if}">
+		        <td class="ow_label">{input name=$action.action}</td>
+		        <td class="ow_value">{$action.description}</td>
+		    </tr>
+	    {/foreach}
+		{if !$smarty.foreach.plugins.last}
+			<tr class="ow_tr_delimiter"><td></td></tr>
+		{/if}
+    {/foreach}
+
+</table>
+
+<table class="ow_table_1 ow_form">
+        <tr class="ow_tr_first">
+            <th class="ow_name ow_txtleft">
+                <span class="ow_section_icon ow_ic_script">{text key="notifications+config_schedule_title"}</span>
+            </th>
+        </tr>
+        <tr class="ow_alt1 ow_tr_last">
+            <td class="ow_value">{input name="schedule"}</td>
+        </tr>
+</table>
+
+<div class="clearfix ow_stdmargin"><div class="ow_right">{submit name='save' class='ow_ic_save'}</div><div class="ow_right"></div></div>
+
+{/form}
+</div>

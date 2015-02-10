@@ -1,0 +1,20 @@
+{foreach from=$items item='item' key='nid'}
+<li class="owm_sidebar_msg_item{if $item.disabled} owm_sidebar_msg_disabled{/if}
+    {if !$item.viewed} owm_sidebar_msg_item_new{/if} clearfix" data-nid="{$nid}"
+    {if isset($item.url)} {if $item.disabled}data-disabled-url="{$item.url}"{else}data-url="{$item.url}"{/if}{/if} onclick="" style="cursor: pointer">
+    <div class="owm_sidebar_msg_avatar">
+        {decorator name='avatar_item' data=$item.avatar}
+    </div>
+    {if isset($item.contentImage)}
+    <div class="owm_sidebar_msg_img">
+        <img src="{$item.contentImage.src}" />
+    </div>
+    {/if}
+    <div class="owm_sidebar_msg_info">
+        <div class="owm_sidebar_msg_string">
+            {$item.string}
+        </div>
+    </div>
+    {if $item.disabled}<div class="owm_sidebar_msg_disabled_item"></div>{/if}
+</li>
+{/foreach}
