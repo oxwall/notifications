@@ -83,6 +83,23 @@ class NOTIFICATIONS_CLASS_EmailBridge
         $this->service->markNotificationsSentByIds($notificationIds);
     }
 
+    public function isNotificationPermited( OW_Event $event )
+    {
+        $params = $event->getParams();
+
+        if ( !isset($params['userId'], $params['action']) )
+        {
+            return;
+        }
+
+        $userId = (int) $params['userId'];
+        $action = $params['action'];
+
+        $event->setData($this->service->isNotificationPermited($userId, $action));
+
+        return $event->getData();
+    }
+
     public function genericAfterInits()
     {
         OW::getEventManager()->bind('notifications.send', array($this, 'sendNotification'));
@@ -97,5 +114,6 @@ class NOTIFICATIONS_CLASS_EmailBridge
     {
         OW::getEventManager()->bind(OW_EventManager::ON_PLUGINS_INIT, array($this, 'genericAfterInits'));
         OW::getEventManager()->bind('notifications.send_list', array($this, 'sendList'));
+        OW::getEventManager()->bind('notifications.is_permited', array($this, 'isNotificationPermited'));
     }
 }
