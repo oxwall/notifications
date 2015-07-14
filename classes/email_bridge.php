@@ -83,7 +83,7 @@ class NOTIFICATIONS_CLASS_EmailBridge
         $this->service->markNotificationsSentByIds($notificationIds);
     }
 
-    public function isRuleChecked( OW_Event $event )
+    public function isNotificationPermited( OW_Event $event )
     {
         $params = $event->getParams();
 
@@ -95,9 +95,7 @@ class NOTIFICATIONS_CLASS_EmailBridge
         $userId = (int) $params['userId'];
         $action = $params['action'];
 
-        $rule = NOTIFICATIONS_BOL_Service::getInstance()->findRuleList($userId, array($action));
-
-        $event->setData(!isset($rule[$action]) || $rule[$action]->checked);
+        $event->setData($this->service->isNotificationPermited($userId, $action));
 
         return $event->getData();
     }
@@ -116,6 +114,6 @@ class NOTIFICATIONS_CLASS_EmailBridge
     {
         OW::getEventManager()->bind(OW_EventManager::ON_PLUGINS_INIT, array($this, 'genericAfterInits'));
         OW::getEventManager()->bind('notifications.send_list', array($this, 'sendList'));
-        OW::getEventManager()->bind('notifications.is_checked', array($this, 'isRuleChecked'));
+        OW::getEventManager()->bind('notifications.is_permited', array($this, 'isNotificationPermited'));
     }
 }
