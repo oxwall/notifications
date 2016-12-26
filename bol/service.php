@@ -6,6 +6,8 @@ class NOTIFICATIONS_BOL_Service
     const SCHEDULE_AUTO = 'auto';
     const SCHEDULE_NEVER = 'never';
 
+	const EVENT_ON_BEFORE_NOTIFICATION_SEND = 'notifications.on_notification_send';
+
     private static $classInstance;
 
     /**
@@ -258,7 +260,38 @@ class NOTIFICATIONS_BOL_Service
 
     public function saveNotification( NOTIFICATIONS_BOL_Notification $notification )
     {
-        $this->notificationDao->saveNotification($notification);
+        $params = array(
+            'entityType' => $notification->entityType,
+            'entityId' => $notification->entityId,
+            'userId' => $notification->userId,
+            'pluginKey' => $notification->pluginKey,
+            'timeStamp' => $notification->timeStamp,
+            'viewed' => $notification->viewed,
+            'sent' => $notification->sent,
+            'active' => $notification->active,
+            'action' => $notification->action,
+            'data' => $notification->data
+        );
+
+        $event = OW::getEventManager()->trigger( new OW_Event(self::EVENT_ON_BEFORE_NOTIFICATION_SEND, $params ) );
+
+        $modifiedParams = $event->getData();
+
+        if( $modifiedParams != null )
+        {
+            $notification->entityType = $modifiedParams['entityType'];
+            $notification->entityId = $modifiedParams['entityId'];
+            $notification->userId = $modifiedParams['userId'];
+            $notification->pluginKey = $modifiedParams['pluginKey'];
+            $notification->timeStamp = $modifiedParams['timeStamp'];
+            $notification->viewed = $modifiedParams['viewed'];
+            $notification->sent = $modifiedParams['sent'];
+            $notification->active = $modifiedParams['active'];
+            $notification->action = $modifiedParams['action'];
+            $notification->data = $modifiedParams['data'];
+
+            $this->notificationDao->saveNotification($notification);
+        }
     }
 
     /**
