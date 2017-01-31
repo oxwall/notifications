@@ -270,28 +270,73 @@ class NOTIFICATIONS_BOL_Service
             'sent' => $notification->sent,
             'active' => $notification->active,
             'action' => $notification->action,
-            'data' => $notification->data
+            'data' => $notification->data,
+            'cancel' => false
         );
 
         $event = OW::getEventManager()->trigger( new OW_Event(self::EVENT_ON_BEFORE_NOTIFICATION_SEND, $params ) );
 
         $modifiedParams = $event->getData();
 
+        if( isset($modifiedParams['cancel']) && $modifiedParams['cancel'] == true )
+        {
+            return;
+        }
+
         if( $modifiedParams != null )
         {
-            $notification->entityType = $modifiedParams['entityType'];
-            $notification->entityId = $modifiedParams['entityId'];
-            $notification->userId = $modifiedParams['userId'];
-            $notification->pluginKey = $modifiedParams['pluginKey'];
-            $notification->timeStamp = $modifiedParams['timeStamp'];
-            $notification->viewed = $modifiedParams['viewed'];
-            $notification->sent = $modifiedParams['sent'];
-            $notification->active = $modifiedParams['active'];
-            $notification->action = $modifiedParams['action'];
-            $notification->data = $modifiedParams['data'];
+            if( isset($modifiedParams['entityType']) )
+            {
+                $notification->entityType = $modifiedParams['entityType'];
+            }
 
-            $this->notificationDao->saveNotification($notification);
+            if( isset($modifiedParams['entityId']) )
+            {
+                $notification->entityId = $modifiedParams['entityId'];
+            }
+
+            if( isset($modifiedParams['userId']) )
+            {
+                $notification->userId = $modifiedParams['userId'];
+            }
+
+            if( isset($modifiedParams['pluginKey']) )
+            {
+                $notification->pluginKey = $modifiedParams['pluginKey'];
+            }
+
+            if( isset($modifiedParams['timeStamp']) )
+            {
+                $notification->timeStamp = $modifiedParams['timeStamp'];
+            }
+
+            if( isset($modifiedParams['viewed']) )
+            {
+                $notification->viewed = $modifiedParams['viewed'];
+            }
+
+            if( isset($modifiedParams['sent']) )
+            {
+                $notification->sent = $modifiedParams['sent'];
+            }
+
+            if( isset($modifiedParams['active']) )
+            {
+                $notification->active = $modifiedParams['active'];
+            }
+
+            if( isset($modifiedParams['action']) )
+            {
+                $notification->action = $modifiedParams['action'];
+            }
+
+            if( isset($modifiedParams['data']) )
+            {
+                $notification->data = $modifiedParams['data'];
+            }
         }
+
+        $this->notificationDao->saveNotification($notification);
     }
 
     /**
