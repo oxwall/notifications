@@ -96,18 +96,6 @@ class NOTIFICATIONS_MCMP_ConsoleItems extends OW_MobileComponent
         {
             $disabled = false;
 
-            /** @var $notification NOTIFICATIONS_BOL_Notification */
-            /*$notifData = $notification->getData();
-
-            if ( isset($notifData['url']) )
-            {
-                if ( is_array($notifData['url']) && !empty($notifData['url']['routeName']) )
-                {
-                    $routeVars = isset($notifData['url']['routeVars']) ? $notifData['url']['routeVars'] : array();
-                    $notifData['url'] = $router->urlForRoute($notifData['url']['routeName'], $routeVars);
-                }
-            }*/
-
             $itemEvent = new OW_Event('mobile.notifications.on_item_render', array(
                 'entityType' => $notification->entityType,
                 'entityId' => $notification->entityId,
@@ -124,7 +112,7 @@ class NOTIFICATIONS_MCMP_ConsoleItems extends OW_MobileComponent
                 $item = $notification->getData();
                 $disabled = true;
 
-                if ( strpos($item['url'], OW_URL_HOME) === 0 )
+                if ( !empty($item['url']) && strpos($item['url'], OW_URL_HOME) === 0 )
                 {
                     $permalinkUri = str_replace(OW_URL_HOME, "", $item['url']);
 

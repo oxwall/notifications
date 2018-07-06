@@ -59,7 +59,7 @@ class NOTIFICATIONS_MCMP_ConsoleSection extends OW_MobileComponent
         parent::onBeforeRender();
 
         $limit = self::SECTION_ITEMS_LIMIT;
-        $this->addComponent('itemsCmp', new NOTIFICATIONS_MCMP_ConsoleItems($limit));
+        $this->addComponent('itemsCmp', OW::getClassInstance('NOTIFICATIONS_MCMP_ConsoleItems', $limit));
         $this->assign('loadMore', $this->service->findNotificationCount(OW::getUser()->getId()) > $limit);
 
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('notifications')->getStaticUrl() . 'mobile.js');
