@@ -62,7 +62,7 @@ class NOTIFICATIONS_MCLASS_ConsoleEventHandler
         {
             $event->add(array(
                 'key' => self::CONSOLE_SECTION_KEY,
-                'component' => new NOTIFICATIONS_MCMP_ConsoleSection(),
+                'component' => OW::getClassInstance('NOTIFICATIONS_MCMP_ConsoleSection'),
                 'order' => 3
             ));
         }
@@ -88,7 +88,7 @@ class NOTIFICATIONS_MCLASS_ConsoleEventHandler
         if ( $params['page'] == self::CONSOLE_PAGE_KEY )
         {
             $event->add(
-                array(self::CONSOLE_SECTION_KEY => new NOTIFICATIONS_MCMP_ConsoleNewItems($params['timestamp']))
+                array(self::CONSOLE_SECTION_KEY => OW::getClassInstance('NOTIFICATIONS_MCMP_ConsoleNewItems', $params['timestamp']))
             );
         }
     }
