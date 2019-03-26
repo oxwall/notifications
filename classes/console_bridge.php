@@ -198,7 +198,7 @@ class NOTIFICATIONS_CLASS_ConsoleBridge
             return array();
         }
 
-        foreach ( array('string', 'conten') as $langProperty )
+        foreach ( array('string', 'content') as $langProperty )
         {
             if ( !empty($data[$langProperty]) && is_array($data[$langProperty]) )
             {
