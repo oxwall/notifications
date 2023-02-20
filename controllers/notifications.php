@@ -38,6 +38,8 @@
  */
 class NOTIFICATIONS_CTRL_Notifications extends OW_ActionController
 {
+    const PLUGIN_KEY = NOTIFICATIONS_BOL_Service::PLUGIN_KEY;
+
     /**
      *
      * @var NOTIFICATIONS_BOL_Service
@@ -78,7 +80,7 @@ class NOTIFICATIONS_CTRL_Notifications extends OW_ActionController
 
         foreach ( $actions as $action )
         {
-            $field = new CheckboxField($action['action']);
+            $field = new CheckboxField($action['action'], self::PLUGIN_KEY);
             $field->setValue(!empty($action['selected']));
 
             if ( isset($settings[$action['action']]) )
@@ -244,24 +246,33 @@ class NOTIFICATIONS_CTRL_Notifications extends OW_ActionController
 
 class NOTIFICATIONS_SettingForm extends Form
 {
+    const PLUGIN_KEY = NOTIFICATIONS_BOL_Service::PLUGIN_KEY;
 
     public function __construct()
     {
-        parent::__construct('notificationSettingForm');
+        parent::__construct('notificationSettingForm', self::PLUGIN_KEY);
 
         $language = OW::getLanguage();
 
-        $field = new RadioField('schedule');
+        $field = new RadioField('schedule', self::PLUGIN_KEY);
 
-        $field->addOption(NOTIFICATIONS_BOL_Service::SCHEDULE_IMMEDIATELY, $language->text('notifications', 'schedule_immediately'));
-        $field->addOption(NOTIFICATIONS_BOL_Service::SCHEDULE_AUTO, $language->text('notifications', 'schedule_automatic'));
-        $field->addOption(NOTIFICATIONS_BOL_Service::SCHEDULE_NEVER, $language->text('notifications', 'schedule_never'));
+        $field->addOptions([
+            NOTIFICATIONS_BOL_Service::SCHEDULE_IMMEDIATELY => $language->text('notifications', 'schedule_immediately'),
+            NOTIFICATIONS_BOL_Service::SCHEDULE_AUTO => $language->text('notifications', 'schedule_automatic'),
+            NOTIFICATIONS_BOL_Service::SCHEDULE_NEVER => $language->text('notifications', 'schedule_never'),
+        ]);
+
+        $field->addOptionElementIds([
+            NOTIFICATIONS_BOL_Service::SCHEDULE_IMMEDIATELY => 'input_' . $this->getName() . '_' . $field->getName() . '_' . NOTIFICATIONS_BOL_Service::SCHEDULE_IMMEDIATELY,
+            NOTIFICATIONS_BOL_Service::SCHEDULE_AUTO => 'input_' . $this->getName() . '_' . $field->getName() . '_' . NOTIFICATIONS_BOL_Service::SCHEDULE_AUTO,
+            NOTIFICATIONS_BOL_Service::SCHEDULE_NEVER => 'input_' . $this->getName() . '_' . $field->getName() . '_' . NOTIFICATIONS_BOL_Service::SCHEDULE_NEVER,
+        ]);
 
         $schedule = NOTIFICATIONS_BOL_Service::getInstance()->getSchedule(OW::getUser()->getId());
         $field->setValue($schedule);
         $this->addElement($field);
 
-        $btn = new Submit('save');
+        $btn = new Submit('save', self::PLUGIN_KEY);
         $btn->setValue($language->text('notifications', 'save_setting_btn_label'));
 
         $this->addElement($btn);

@@ -2,6 +2,8 @@
 
 class NOTIFICATIONS_BOL_Service
 {
+    const PLUGIN_KEY = 'notifications';
+
     const SCHEDULE_IMMEDIATELY = 'immediately';
     const SCHEDULE_AUTO = 'auto';
     const SCHEDULE_NEVER = 'never';
